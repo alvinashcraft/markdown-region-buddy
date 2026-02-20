@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/learn-area-manager"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/learn-area-manager/dist/**/*.js"
+      ],
+      "preLaunchTask": "${defaultBuildTask}"
+    },
+    {
+      "name": "Extension Tests",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/learn-area-manager",
+        "--extensionTestsPath=${workspaceFolder}/learn-area-manager/out/test/suite/index"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/learn-area-manager/out/test/**/*.js"
+      ],
+      "preLaunchTask": "npm: watch-tests"
+    }
+  ]
+}

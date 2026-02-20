@@ -1,0 +1,169 @@
+{
+  "name": "learn-area-manager",
+  "displayName": "Learn Area Manager",
+  "description": "Manage Microsoft Learn markdown sections (monikers, zone pivots, and tabs) with folding, hover previews, and focus commands",
+  "version": "0.0.1",
+  "publisher": "your-publisher-name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/learn-area-manager"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "learnAreaManager.toggleCurrentSection",
+        "title": "Learn Area Manager: Toggle Current Section"
+      },
+      {
+        "command": "learnAreaManager.expandCurrentSection",
+        "title": "Learn Area Manager: Expand Current Section"
+      },
+      {
+        "command": "learnAreaManager.collapseCurrentSection",
+        "title": "Learn Area Manager: Collapse Current Section"
+      },
+      {
+        "command": "learnAreaManager.expandAll",
+        "title": "Learn Area Manager: Expand All Sections"
+      },
+      {
+        "command": "learnAreaManager.collapseAll",
+        "title": "Learn Area Manager: Collapse All Sections"
+      },
+      {
+        "command": "learnAreaManager.expandNamedSection",
+        "title": "Learn Area Manager: Expand Named Section"
+      },
+      {
+        "command": "learnAreaManager.collapseNamedSection",
+        "title": "Learn Area Manager: Collapse Named Section"
+      },
+      {
+        "command": "learnAreaManager.focusSection",
+        "title": "Learn Area Manager: Focus on Section"
+      },
+      {
+        "command": "learnAreaManager.toggleDecorations",
+        "title": "Learn Area Manager: Toggle Section Background Colors"
+      },
+      {
+        "command": "learnAreaManager.configureAsDefaultProvider",
+        "title": "Learn Area Manager: Set as Default Folding Provider"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "learnAreaManager.toggleCurrentSection",
+        "key": "ctrl+alt+[",
+        "mac": "cmd+alt+[",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "learnAreaManager.expandCurrentSection",
+        "key": "ctrl+alt+]",
+        "mac": "cmd+alt+]",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "learnAreaManager.focusSection",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f",
+        "when": "editorTextFocus && editorLangId == markdown"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "learnAreaManager.context",
+          "group": "1_modification",
+          "when": "editorLangId == markdown"
+        }
+      ],
+      "learnAreaManager.context": [
+        {
+          "command": "learnAreaManager.toggleCurrentSection",
+          "group": "1_current"
+        },
+        {
+          "command": "learnAreaManager.expandNamedSection",
+          "group": "2_named"
+        },
+        {
+          "command": "learnAreaManager.collapseNamedSection",
+          "group": "2_named"
+        },
+        {
+          "command": "learnAreaManager.expandAll",
+          "group": "3_all"
+        },
+        {
+          "command": "learnAreaManager.collapseAll",
+          "group": "3_all"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "learnAreaManager.context",
+        "label": "Learn Area Manager"
+      }
+    ],
+    "configuration": {
+      "title": "Learn Area Manager",
+      "properties": {
+        "learnAreaManager.enableDecorations": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable background colors for different section types"
+        },
+        "learnAreaManager.decorationOpacity": {
+          "type": "number",
+          "default": 0.05,
+          "minimum": 0.01,
+          "maximum": 0.3,
+          "description": "Opacity for section background colors (0.01-0.3)"
+        },
+        "learnAreaManager.overrideFoldingProvider": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set this extension as the default folding provider for Markdown files. Resolves conflicts with VS Code's built-in markdown folding provider. When enabled, this extension provides both Learn section folds and standard markdown folds (headings, code blocks, tables)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "@vscode/test-cli": "^0.0.4",
+    "@vscode/test-electron": "^2.3.8"
+  }
+}

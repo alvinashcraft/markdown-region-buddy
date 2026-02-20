@@ -20,8 +20,9 @@ export class LearnSectionParser {
     private static readonly MONIKER_END = /^(\s*):::\s*moniker-end/;
     private static readonly ZONE_START = /^(\s*):::\s*zone pivot="([^"]+)"/;
     private static readonly ZONE_END = /^(\s*):::\s*zone-end/;
-    private static readonly TAB_HEADER = /^(\s*)# \[([^\]]+)\]\(#tab\/([^)]+)\)/;
+    private static readonly TAB_HEADER = /^(\s*)#{1,6} \[([^\]]+)\]\(#tab\/([^)]+)\)/;
     private static readonly TAB_END = /^(\s*)---\s*$/;
+    private static readonly FENCE_OPEN = /^(\s*)(```|~~~)/;
 
     /**
      * Parse all Learn sections in a document
@@ -29,15 +30,21 @@ export class LearnSectionParser {
     public static parseSections(document: vscode.TextDocument): LearnSection[] {
         const sections: LearnSection[] = [];
         const lineCount = document.lineCount;
+        const codeFenceLines = this.buildCodeFenceLineSet(document);
         
         // Parse all sections including nested ones
         for (let i = 0; i < lineCount; i++) {
+            // Skip lines inside fenced code blocks
+            if (codeFenceLines.has(i)) {
+                continue;
+            }
+
             const line = document.lineAt(i).text;
             
             // Check for moniker
             const monikerMatch = line.match(this.MONIKER_START);
             if (monikerMatch) {
-                const section = this.parseMonikerSection(document, i, monikerMatch);
+                const section = this.parseMonikerSection(document, i, monikerMatch, codeFenceLines);
                 if (section) {
                     sections.push(section);
                 }
@@ -46,7 +53,7 @@ export class LearnSectionParser {
             // Check for zone pivot
             const zoneMatch = line.match(this.ZONE_START);
             if (zoneMatch) {
-                const section = this.parseZoneSection(document, i, zoneMatch);
+                const section = this.parseZoneSection(document, i, zoneMatch, codeFenceLines);
                 if (section) {
                     sections.push(section);
                 }
@@ -55,7 +62,7 @@ export class LearnSectionParser {
             // Check for tab
             const tabMatch = line.match(this.TAB_HEADER);
             if (tabMatch) {
-                const section = this.parseTabSection(document, i, tabMatch);
+                const section = this.parseTabSection(document, i, tabMatch, codeFenceLines);
                 if (section) {
                     sections.push(section);
                 }
@@ -118,10 +125,43 @@ export class LearnSectionParser {
         return Array.from(uniqueMap.values());
     }
 
+    /**
+     * Build a Set of line numbers that fall inside fenced code blocks.
+     */
+    private static buildCodeFenceLineSet(document: vscode.TextDocument): Set<number> {
+        const set = new Set<number>();
+        let i = 0;
+        while (i < document.lineCount) {
+            const openMatch = document.lineAt(i).text.match(this.FENCE_OPEN);
+            if (openMatch) {
+                const fence = openMatch[2];
+                const indent = openMatch[1].length;
+                const startLine = i;
+                i++;
+                while (i < document.lineCount) {
+                    const closeMatch = document.lineAt(i).text.match(this.FENCE_OPEN);
+                    if (closeMatch && closeMatch[2] === fence && closeMatch[1].length <= indent) {
+                        // Mark all lines from open to close (inclusive) as inside a code block
+                        for (let j = startLine; j <= i; j++) {
+                            set.add(j);
+                        }
+                        i++;
+                        break;
+                    }
+                    i++;
+                }
+            } else {
+                i++;
+            }
+        }
+        return set;
+    }
+
     private static parseMonikerSection(
         document: vscode.TextDocument, 
         startLine: number, 
-        match: RegExpMatchArray
+        match: RegExpMatchArray,
+        codeFenceLines: Set<number>
     ): LearnSection | undefined {
         const indent = match[1];
         const name = match[2];
@@ -129,6 +169,9 @@ export class LearnSectionParser {
         
         // Find the matching end
         for (let i = startLine + 1; i < document.lineCount; i++) {
+            if (codeFenceLines.has(i)) {
+                continue;
+            }
             const line = document.lineAt(i).text;
             const endMatch = line.match(this.MONIKER_END);
             
@@ -150,7 +193,8 @@ export class LearnSectionParser {
     private static parseZoneSection(
         document: vscode.TextDocument, 
         startLine: number, 
-        match: RegExpMatchArray
+        match: RegExpMatchArray,
+        codeFenceLines: Set<number>
     ): LearnSection | undefined {
         const indent = match[1];
         const name = match[2];
@@ -158,6 +202,9 @@ export class LearnSectionParser {
         
         // Find the matching end
         for (let i = startLine + 1; i < document.lineCount; i++) {
+            if (codeFenceLines.has(i)) {
+                continue;
+            }
             const line = document.lineAt(i).text;
             const endMatch = line.match(this.ZONE_END);
             
@@ -179,7 +226,8 @@ export class LearnSectionParser {
     private static parseTabSection(
         document: vscode.TextDocument, 
         startLine: number, 
-        match: RegExpMatchArray
+        match: RegExpMatchArray,
+        codeFenceLines: Set<number>
     ): LearnSection | undefined {
         const indent = match[1];
         const label = match[2];
@@ -188,6 +236,11 @@ export class LearnSectionParser {
         
         // Find the end (either another tab header or horizontal rule)
         for (let i = startLine + 1; i < document.lineCount; i++) {
+            // Skip lines inside fenced code blocks — a --- or # [...](#tab/...)
+            // inside a code example must not end the tab section
+            if (codeFenceLines.has(i)) {
+                continue;
+            }
             const line = document.lineAt(i).text;
             
             // Check for horizontal rule (end of tab group)

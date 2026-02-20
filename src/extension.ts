@@ -4,6 +4,8 @@ import { LearnHoverProvider } from './learnHoverProvider';
 import { LearnFoldingCommands } from './learnFoldingCommands';
 import { LearnDecorationManager } from './learnDecorationManager';
 
+const EXTENSION_ID = 'your-publisher-name.learn-area-manager';
+
 let decorationManager: LearnDecorationManager;
 
 /**
@@ -102,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
             if (choice === 'Yes') {
                 const config = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
-                await config.update('defaultFoldingRangeProvider', 'your-publisher-name.learn-area-manager', vscode.ConfigurationTarget.Global);
+                await config.update('defaultFoldingRangeProvider', EXTENSION_ID, vscode.ConfigurationTarget.Global);
                 vscode.window.showInformationMessage('Learn Area Manager is now the default folding provider for Markdown files.');
             }
         })
@@ -128,10 +130,24 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     // Update decorations on configuration change
+    // Also handle overrideFoldingProvider being toggled at runtime
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(event => {
             if (event.affectsConfiguration('learnAreaManager')) {
                 decorationManager.onConfigurationChanged();
+
+                if (event.affectsConfiguration('learnAreaManager.overrideFoldingProvider')) {
+                    const cfg = vscode.workspace.getConfiguration('learnAreaManager');
+                    const editorCfg = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
+                    if (cfg.get<boolean>('overrideFoldingProvider', false)) {
+                        editorCfg.update('defaultFoldingRangeProvider', EXTENSION_ID, vscode.ConfigurationTarget.Global);
+                    } else {
+                        const current = editorCfg.get<string>('defaultFoldingRangeProvider');
+                        if (current === EXTENSION_ID) {
+                            editorCfg.update('defaultFoldingRangeProvider', undefined, vscode.ConfigurationTarget.Global);
+                        }
+                    }
+                }
             }
         })
     );
@@ -146,8 +162,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (learnConfig.get<boolean>('overrideFoldingProvider', false)) {
         const editorConfig = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
         const currentProvider = editorConfig.get<string>('defaultFoldingRangeProvider');
-        if (currentProvider !== 'your-publisher-name.learn-area-manager') {
-            editorConfig.update('defaultFoldingRangeProvider', 'your-publisher-name.learn-area-manager', vscode.ConfigurationTarget.Global);
+        if (currentProvider !== EXTENSION_ID) {
+            editorConfig.update('defaultFoldingRangeProvider', EXTENSION_ID, vscode.ConfigurationTarget.Global);
         }
     }
 
@@ -155,7 +171,15 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 /**
- * Deactivates the extension
+ * Deactivates the extension.
+ * Note: We intentionally do NOT remove the defaultFoldingRangeProvider setting here.
+ * deactivate() runs on every VS Code shutdown, not just on uninstall/disable.
+ * Removing it here would force users to re-run the command every session.
+ * Instead, the setting is managed via:
+ *   - The overrideFoldingProvider config (auto-set on activate, removed when toggled off)
+ *   - The configureAsDefaultProvider command (persists across sessions)
+ * If the extension is uninstalled, the stale setting is harmless — VS Code
+ * silently falls back to the built-in provider when the named provider is missing.
  */
 export function deactivate() {
     console.log('Learn Area Manager extension is now deactivated.');

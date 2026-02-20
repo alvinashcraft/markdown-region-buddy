@@ -35,7 +35,15 @@ interface LearnSection {
 |------|--------------|-------------|
 | Moniker | `/^(\s*):::\s*moniker range="([^"]+)"/` | `/^(\s*):::\s*moniker-end/` |
 | Zone Pivot | `/^(\s*):::\s*zone pivot="([^"]+)"/` | `/^(\s*):::\s*zone-end/` |
-| Tab | `/^(\s*)# \[([^\]]+)\]\(#tab\/([^)]+)\)/` | `/^(\s*)---\s*$/` or next tab header |
+| Tab | `/^(\s*)#{1,6} \[([^\]]+)\]\(#tab\/([^)]+)\)/` | `/^(\s*)---\s*$/` or next tab header |
+
+### Tab section rules
+
+- Basic syntax: `# [Tab Display Name](#tab/tab-id)` (any heading level `#` through `######`)
+- Dependent tab syntax: `# [Tab Display Name](#tab/tab-id/tab-condition)` — makes a tab conditional on a previous tab selection. Only one level of dependency is allowed.
+- A tab group must be terminated with three dashes (`---`).
+- A tab group must contain at least two tabs and no more than four tabs.
+- The `name` field in `LearnSection` captures everything after `#tab/` (i.e., `tab-id` or `tab-id/tab-condition`).
 
 ## Coding Conventions
 

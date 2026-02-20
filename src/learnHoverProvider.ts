@@ -52,16 +52,20 @@ export class LearnHoverProvider implements vscode.HoverProvider {
         editor: vscode.TextEditor, 
         section: { startLine: number, endLine: number }
     ): boolean {
-        // Check if any line within the section (except the first) is visible
+        // The folding range ends at endLine - 1 so the end marker stays visible.
+        // Only check the content lines that are actually hidden when folded.
+        const lastHiddenLine = section.endLine - 1;
+        if (lastHiddenLine <= section.startLine) {
+            return false; // No content lines to hide
+        }
+
         for (const visibleRange of editor.visibleRanges) {
-            for (let line = section.startLine + 1; line <= section.endLine; line++) {
+            for (let line = section.startLine + 1; line <= lastHiddenLine; line++) {
                 if (visibleRange.contains(new vscode.Position(line, 0))) {
-                    // Found a visible line within the section, so it's not collapsed
                     return false;
                 }
             }
         }
-        // No lines found within the section, so it's collapsed
         return true;
     }
 

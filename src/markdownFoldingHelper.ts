@@ -10,7 +10,7 @@ export class MarkdownFoldingHelper {
     private static readonly FENCE_OPEN = /^(\s*)(```|~~~)/;
     private static readonly TABLE_ROW = /^\s*\|/;
     private static readonly TABLE_SEPARATOR = /^\s*\|[\s-:|]+\|\s*$/;
-    private static readonly TAB_HEADER = /^(\s*)# \[([^\]]+)\]\(#tab\/([^)]+)\)/;
+    private static readonly TAB_HEADER = /^(\s*)#{1,6} \[([^\]]+)\]\(#tab\/([^)]+)\)/;
 
     /**
      * Parse standard markdown folding ranges from a document.

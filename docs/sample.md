@@ -123,6 +123,90 @@ This is basic content for version 2.
 
 ::: moniker-end
 
+## Blockquotes Example
+
+> This is a single-line blockquote (should not fold).
+
+> This is a multi-line blockquote.
+> It spans multiple lines and should be foldable.
+> You can include **bold** and *italic* text.
+> And even links like [example](https://example.com).
+
+> This blockquote has a nested quote:
+>
+> > This is the nested part.
+> > It continues here.
+>
+> Back to the outer level.
+
+## HTML Blocks Example
+
+<details>
+<summary>Click to expand</summary>
+
+This content is inside an HTML details element.
+It should be foldable.
+
+</details>
+
+<div class="custom-container">
+  <p>This is a multi-line HTML block.</p>
+  <p>It should fold from the opening to the closing tag.</p>
+</div>
+
+<!--
+This is a multi-line HTML comment.
+It should be foldable.
+Comments like this are useful for notes to authors.
+-->
+
+## Region Markers Example
+
+<!-- #region Setup Instructions -->
+These instructions explain how to set up the project.
+
+You can fold this section using the region marker.
+<!-- #endregion -->
+
+<!-- #region Outer Region -->
+This is the outer region.
+
+<!-- #region Inner Region -->
+This is a nested region inside the outer one.
+Both should fold independently.
+<!-- #endregion -->
+
+Back to the outer region.
+<!-- #endregion -->
+
+## Lists Example
+
+- Simple item 1
+- Simple item 2 with
+  continuation on the next line
+  and another line here
+- Simple item 3
+
+1. First ordered item
+   with a continuation line
+   and another
+2. Second ordered item
+3. Third ordered item
+
+- Parent item
+  - Nested child 1
+    - Deeply nested item
+    - Another deeply nested
+  - Nested child 2
+- Another parent item
+
+* Item with multiple paragraphs
+
+  This is a continuation paragraph under the list item.
+  It should be included in the fold.
+
+* Next item
+
 ## End of Document
 
 This extension allows you to:

@@ -4,7 +4,7 @@ A VS Code extension for managing markdown regions including monikers, zone pivot
 
 ## Features
 
-- **Folding Support**: Collapse and expand monikers, zone pivots, and tabs sections
+- **Folding Support**: Collapse and expand monikers, zone pivots, tabs, headings, code blocks, tables, blockquotes, HTML blocks, front matter, region markers, and lists
 - **Hover Previews**: View section contents when hovering over collapsed sections
 - **Context Menu**: Right-click to expand/collapse sections by name or type
 - **Keyboard Shortcuts**: Quick access to expand/collapse operations
@@ -67,21 +67,15 @@ Add this to your `settings.json`:
 - **Default folding conflicts**: Without configuring this extension as the default folding provider (see above), VS Code's built-in markdown folding can take precedence over region folds when both start on the same line. This primarily affects tab sections.
 - **Tab section syntax**: Tab sections use `# [Label](#tab/id)` syntax which VS Code's markdown parser treats as H1 headers. Configuring this extension as the default folding provider resolves this.
 - **Workaround without overriding**: Hover tooltips and background decorations work correctly regardless of folding conflicts.
-- **List sub-item folding**: The extension does not currently replicate VS Code's built-in folding for nested list items. This is a low-priority feature that may be added in the future.
 
 ## Design Decisions
 
 - **Separate markdown fold helper**: Standard markdown fold detection (`MarkdownFoldingHelper`) is kept separate from `LearnSectionParser` since these are generic markdown constructs, keeping the region-specific parser focused.
 - **Tab header exclusion**: `MarkdownFoldingHelper` explicitly skips `# [Label](#tab/id)` lines to avoid duplicating tab folds as heading folds.
-- **Code block awareness**: All fold detection in `MarkdownFoldingHelper` tracks whether a line is inside a fenced code block to prevent false positives (e.g., `#` headings inside code blocks).
-- **FoldingRangeKind**: regions use `FoldingRangeKind.Region`; standard markdown folds use `undefined` to match VS Code's built-in behavior.
+- **Expanding excluded set**: Fold detection uses an ordered pipeline — code blocks and front matter are detected first and added to an excluded-lines set, preventing `#` comments in YAML and `---` inside HTML from being misdetected as headings or table separators.
+- **Front matter vs tab `---`**: Front matter is only detected at line 0 with no leading whitespace, and is added to the section parser's excluded set so tab `---` terminators are not confused with YAML delimiters.
+- **FoldingRangeKind**: Regions and region markers use `FoldingRangeKind.Region`; standard markdown folds use `undefined` to match VS Code's built-in behavior.
 - **Setting default**: `overrideFoldingProvider` defaults to `false` so the extension does not modify user settings without explicit consent.
-
-## Further Considerations
-
-- **Blockquotes and HTML blocks**: VS Code's built-in provider also folds blockquotes (`> ...`) and multi-line HTML blocks. These are uncommon in documentation content and are not yet implemented. They can be added to `MarkdownFoldingHelper` if users report missing folds.
-- **Region markers**: The built-in provider folds `<!-- #region -->` / `<!-- #endregion -->` comment markers. These are rare in markdown and can be added if requested.
-- **List sub-item folding**: Multi-line and nested list items can fold in VS Code's built-in provider. This was deferred as low priority but can be implemented if needed.
 
 ## Documentation
 

@@ -125,13 +125,35 @@ export class LearnSectionParser {
         return Array.from(uniqueMap.values());
     }
 
+    private static readonly FRONT_MATTER_DELIMITER = /^---\s*$/;
+
     /**
-     * Build a Set of line numbers that fall inside fenced code blocks.
+     * Build a Set of line numbers that fall inside fenced code blocks or front matter.
+     * Front matter (YAML) at the start of the document uses `---` delimiters which
+     * would otherwise be misdetected as tab section terminators.
      */
     private static buildCodeFenceLineSet(document: vscode.TextDocument): Set<number> {
         const set = new Set<number>();
+
+        // Detect front matter at line 0
+        if (document.lineCount >= 2 && this.FRONT_MATTER_DELIMITER.test(document.lineAt(0).text)) {
+            for (let i = 1; i < document.lineCount; i++) {
+                if (this.FRONT_MATTER_DELIMITER.test(document.lineAt(i).text)) {
+                    for (let j = 0; j <= i; j++) {
+                        set.add(j);
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Detect fenced code blocks
         let i = 0;
         while (i < document.lineCount) {
+            if (set.has(i)) {
+                i++;
+                continue;
+            }
             const openMatch = document.lineAt(i).text.match(this.FENCE_OPEN);
             if (openMatch) {
                 const fence = openMatch[2];

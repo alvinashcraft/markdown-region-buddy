@@ -1,4 +1,4 @@
-# Learn Area Manager - Quick Reference
+# Markdown Region Buddy - Quick Reference
 
 ## Keyboard Shortcuts
 
@@ -10,7 +10,7 @@
 
 ## Commands (Command Palette)
 
-Type `Learn Area Manager` in Command Palette (`Ctrl+Shift+P`) to see all commands:
+Type `Markdown Region Buddy` in Command Palette (`Ctrl+Shift+P`) to see all commands:
 
 - **Toggle Current Section** - Toggle section at cursor position
 - **Expand Current Section** - Expand section at cursor
@@ -24,7 +24,7 @@ Type `Learn Area Manager` in Command Palette (`Ctrl+Shift+P`) to see all command
 
 ## Context Menu
 
-Right-click in markdown → **Learn Area Manager** submenu:
+Right-click in markdown → **Markdown Region Buddy** submenu:
 - Toggle Current Section
 - Expand Named Section
 - Collapse Named Section
@@ -61,10 +61,10 @@ Windows content
 ```json
 {
   // Enable colored backgrounds for sections
-  "learnAreaManager.enableDecorations": false,
+  "markdownRegionBuddy.enableDecorations": false,
   
   // Opacity for section backgrounds (0.01-0.3)
-  "learnAreaManager.decorationOpacity": 0.05
+  "markdownRegionBuddy.decorationOpacity": 0.05
 }
 ```
 
@@ -80,7 +80,7 @@ Windows content
 
 ### Example 1: Review All Zone Pivots
 1. Place cursor in any zone pivot section
-2. Right-click → Learn Area Manager → Collapse Named Section
+2. Right-click → Markdown Region Buddy → Collapse Named Section
 3. Manually expand each zone pivot to review
 
 ### Example 2: Focus on Python Content
@@ -97,9 +97,9 @@ Windows content
 
 Due to VS Code's folding architecture:
 
-- **Fold indicators may not appear** in the gutter for Learn sections that contain markdown headers (`#`, `##`, etc.) or tab sections
+- **Fold indicators may not appear** in the gutter for regions that contain markdown headers (`#`, `##`, etc.) or tab sections
 - **Tab sections** (using `# [Label](#tab/id)` syntax) are treated as H1 headers by VS Code's markdown parser
-- **Folding conflicts**: When Learn sections contain headers, VS Code's built-in markdown folding provider takes precedence
+- **Folding conflicts**: When regions contain headers, VS Code's built-in markdown folding provider takes precedence
 - **Workaround**: Keyboard shortcuts and commands may still be affected by the same conflicts, but hover tooltips and background decorations work correctly
 
 ## Troubleshooting
@@ -111,7 +111,7 @@ Due to VS Code's folding architecture:
 
 **Q: Keyboard shortcut folds wrong section**
 - This occurs when sections contain markdown headers
-- VS Code's header folding conflicts with Learn section folding
+- VS Code's header folding conflicts with region folding
 - Unfortunately this is a VS Code API limitation
 
 **Q: Hover preview doesn't show**
@@ -124,5 +124,5 @@ Due to VS Code's folding architecture:
 - Some commands require cursor to be within a section
 
 **Q: Background colors too bright/dim**
-- Adjust `learnAreaManager.decorationOpacity` setting
+- Adjust `markdownRegionBuddy.decorationOpacity` setting
 - Try values between 0.02 and 0.15 for best results

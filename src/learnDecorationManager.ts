@@ -18,7 +18,7 @@ export class LearnDecorationManager {
      * Load configuration settings
      */
     private loadConfiguration(): void {
-        const config = vscode.workspace.getConfiguration('learnAreaManager');
+        const config = vscode.workspace.getConfiguration('markdownRegionBuddy');
         this.enabled = config.get<boolean>('enableDecorations', false);
         this.opacity = config.get<number>('decorationOpacity', 0.05);
     }
@@ -46,7 +46,7 @@ export class LearnDecorationManager {
             const decorationType = vscode.window.createTextEditorDecorationType({
                 isWholeLine: true,
                 backgroundColor: {
-                    id: `learnAreaManager.${type}Background`
+                    id: `markdownRegionBuddy.${type}Background`
                 },
                 light: {
                     backgroundColor: `rgba(${colors.light}, ${this.opacity})`
@@ -101,7 +101,7 @@ export class LearnDecorationManager {
     public async toggleDecorations(): Promise<void> {
         this.enabled = !this.enabled;
         
-        const config = vscode.workspace.getConfiguration('learnAreaManager');
+        const config = vscode.workspace.getConfiguration('markdownRegionBuddy');
         await config.update('enableDecorations', this.enabled, vscode.ConfigurationTarget.Global);
         
         this.initializeDecorationTypes();
@@ -111,7 +111,7 @@ export class LearnDecorationManager {
         }
 
         vscode.window.showInformationMessage(
-            `Learn section decorations ${this.enabled ? 'enabled' : 'disabled'}.`
+            `Region decorations ${this.enabled ? 'enabled' : 'disabled'}.`
         );
     }
 

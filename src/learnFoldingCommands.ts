@@ -16,7 +16,7 @@ export class LearnFoldingCommands {
 
         const section = LearnSectionParser.findSectionAtLine(editor.document, editor.selection.active.line);
         if (!section) {
-            vscode.window.showInformationMessage('No Learn section found at cursor position.');
+            vscode.window.showInformationMessage('No region found at cursor position.');
             return;
         }
 
@@ -34,7 +34,7 @@ export class LearnFoldingCommands {
 
         const section = LearnSectionParser.findSectionAtLine(editor.document, editor.selection.active.line);
         if (!section) {
-            vscode.window.showInformationMessage('No Learn section found at cursor position.');
+            vscode.window.showInformationMessage('No region found at cursor position.');
             return;
         }
 
@@ -52,7 +52,7 @@ export class LearnFoldingCommands {
 
         const section = LearnSectionParser.findSectionAtLine(editor.document, editor.selection.active.line);
         if (!section) {
-            vscode.window.showInformationMessage('No Learn section found at cursor position.');
+            vscode.window.showInformationMessage('No region found at cursor position.');
             return;
         }
 
@@ -86,7 +86,7 @@ export class LearnFoldingCommands {
     /**
      * Expand only Learn sections (monikers, zone pivots, tabs) in the document
      */
-    public static async expandAllLearnSections(): Promise<void> {
+    public static async expandAllRegions(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         if (!editor || editor.document.languageId !== 'markdown') {
             return;
@@ -101,7 +101,7 @@ export class LearnFoldingCommands {
     /**
      * Collapse only Learn sections (monikers, zone pivots, tabs) in the document
      */
-    public static async collapseAllLearnSections(): Promise<void> {
+    public static async collapseAllRegions(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         if (!editor || editor.document.languageId !== 'markdown') {
             return;
@@ -124,7 +124,7 @@ export class LearnFoldingCommands {
 
         const section = LearnSectionParser.findSectionAtLine(editor.document, editor.selection.active.line);
         if (!section) {
-            vscode.window.showInformationMessage('No Learn section found at cursor position.');
+            vscode.window.showInformationMessage('No region found at cursor position.');
             return;
         }
 
@@ -147,7 +147,7 @@ export class LearnFoldingCommands {
 
         const section = LearnSectionParser.findSectionAtLine(editor.document, editor.selection.active.line);
         if (!section) {
-            vscode.window.showInformationMessage('No Learn section found at cursor position.');
+            vscode.window.showInformationMessage('No region found at cursor position.');
             return;
         }
 
@@ -170,7 +170,7 @@ export class LearnFoldingCommands {
 
         const uniqueSections = LearnSectionParser.getUniqueSections(editor.document);
         if (uniqueSections.length === 0) {
-            vscode.window.showInformationMessage('No Learn sections found in this document.');
+            vscode.window.showInformationMessage('No regions found in this document.');
             return;
         }
 

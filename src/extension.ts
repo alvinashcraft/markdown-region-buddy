@@ -4,15 +4,16 @@ import { LearnHoverProvider } from './learnHoverProvider';
 import { LearnFoldingCommands } from './learnFoldingCommands';
 import { LearnDecorationManager } from './learnDecorationManager';
 
-const EXTENSION_ID = 'your-publisher-name.learn-area-manager';
+const EXTENSION_ID = 'alvinashcraft.markdown-region-buddy';
 
 let decorationManager: LearnDecorationManager;
+let decorationUpdateTimeout: ReturnType<typeof setTimeout> | undefined;
 
 /**
- * Activates the Learn Area Manager extension
+ * Activates the Markdown Region Buddy extension
  */
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Learn Area Manager extension is now active!');
+    console.log('Markdown Region Buddy extension is now active!');
 
     // Register folding provider for markdown files
     // Use pattern to increase selector specificity, which can give this provider
@@ -42,82 +43,82 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Register commands
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.toggleCurrentSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.toggleCurrentSection', () => 
             LearnFoldingCommands.toggleCurrentSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.expandCurrentSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.expandCurrentSection', () => 
             LearnFoldingCommands.expandCurrentSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.collapseCurrentSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.collapseCurrentSection', () => 
             LearnFoldingCommands.collapseCurrentSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.expandAll', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.expandAll', () => 
             LearnFoldingCommands.expandAll()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.collapseAll', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.collapseAll', () => 
             LearnFoldingCommands.collapseAll()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.expandAllLearnSections', () => 
-            LearnFoldingCommands.expandAllLearnSections()
+        vscode.commands.registerCommand('markdownRegionBuddy.expandAllRegions', () => 
+            LearnFoldingCommands.expandAllRegions()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.collapseAllLearnSections', () => 
-            LearnFoldingCommands.collapseAllLearnSections()
+        vscode.commands.registerCommand('markdownRegionBuddy.collapseAllRegions', () => 
+            LearnFoldingCommands.collapseAllRegions()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.expandNamedSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.expandNamedSection', () => 
             LearnFoldingCommands.expandNamedSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.collapseNamedSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.collapseNamedSection', () => 
             LearnFoldingCommands.collapseNamedSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.focusSection', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.focusSection', () => 
             LearnFoldingCommands.focusSection()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.toggleDecorations', () => 
+        vscode.commands.registerCommand('markdownRegionBuddy.toggleDecorations', () => 
             decorationManager.toggleDecorations()
         )
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('learnAreaManager.configureAsDefaultProvider', async () => {
+        vscode.commands.registerCommand('markdownRegionBuddy.configureAsDefaultProvider', async () => {
             const choice = await vscode.window.showInformationMessage(
-                'Set Learn Area Manager as the default folding provider for Markdown files? ' +
+                'Set Markdown Region Buddy as the default folding provider for Markdown files? ' +
                 'This resolves folding conflicts with VS Code\'s built-in markdown provider.',
                 'Yes', 'No'
             );
             if (choice === 'Yes') {
                 const config = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
                 await config.update('defaultFoldingRangeProvider', EXTENSION_ID, vscode.ConfigurationTarget.Global);
-                vscode.window.showInformationMessage('Learn Area Manager is now the default folding provider for Markdown files.');
+                vscode.window.showInformationMessage('Markdown Region Buddy is now the default folding provider for Markdown files.');
             }
         })
     );
@@ -131,12 +132,17 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    // Update decorations on document change
+    // Update decorations on document change (debounced to avoid re-parsing on every keystroke)
     context.subscriptions.push(
         vscode.workspace.onDidChangeTextDocument(event => {
             const editor = vscode.window.activeTextEditor;
             if (editor && event.document === editor.document) {
-                decorationManager.updateDecorations(editor);
+                if (decorationUpdateTimeout) {
+                    clearTimeout(decorationUpdateTimeout);
+                }
+                decorationUpdateTimeout = setTimeout(() => {
+                    decorationManager.updateDecorations(editor);
+                }, 300);
             }
         })
     );
@@ -145,11 +151,11 @@ export function activate(context: vscode.ExtensionContext) {
     // Also handle overrideFoldingProvider being toggled at runtime
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(event => {
-            if (event.affectsConfiguration('learnAreaManager')) {
+            if (event.affectsConfiguration('markdownRegionBuddy')) {
                 decorationManager.onConfigurationChanged();
 
-                if (event.affectsConfiguration('learnAreaManager.overrideFoldingProvider')) {
-                    const cfg = vscode.workspace.getConfiguration('learnAreaManager');
+                if (event.affectsConfiguration('markdownRegionBuddy.overrideFoldingProvider')) {
+                    const cfg = vscode.workspace.getConfiguration('markdownRegionBuddy');
                     const editorCfg = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
                     if (cfg.get<boolean>('overrideFoldingProvider', false)) {
                         editorCfg.update('defaultFoldingRangeProvider', EXTENSION_ID, vscode.ConfigurationTarget.Global);
@@ -170,7 +176,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // If configured, set this extension as the default folding provider for markdown
-    const learnConfig = vscode.workspace.getConfiguration('learnAreaManager');
+    const learnConfig = vscode.workspace.getConfiguration('markdownRegionBuddy');
     if (learnConfig.get<boolean>('overrideFoldingProvider', false)) {
         const editorConfig = vscode.workspace.getConfiguration('editor', { languageId: 'markdown' });
         const currentProvider = editorConfig.get<string>('defaultFoldingRangeProvider');
@@ -179,7 +185,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    vscode.window.showInformationMessage('Learn Area Manager extension activated!');
+    vscode.window.showInformationMessage('Markdown Region Buddy extension activated!');
 }
 
 /**
@@ -194,5 +200,5 @@ export function activate(context: vscode.ExtensionContext) {
  * silently falls back to the built-in provider when the named provider is missing.
  */
 export function deactivate() {
-    console.log('Learn Area Manager extension is now deactivated.');
+    console.log('Markdown Region Buddy extension is now deactivated.');
 }

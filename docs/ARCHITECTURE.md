@@ -200,7 +200,7 @@ Extension Activation
 **Scenario**: User presses `Ctrl+Alt+F` (Focus Section)
 
 ```
-1. Command triggered: learnAreaManager.focusSection
+1. Command triggered: markdownRegionBuddy.focusSection
       │
 2. LearnFoldingCommands.focusSection() called
       │
@@ -234,7 +234,7 @@ User changes setting
 VS Code fires onDidChangeConfiguration event
       │
       ▼
-Extension checks: event.affectsConfiguration('learnAreaManager')
+Extension checks: event.affectsConfiguration('markdownRegionBuddy')
       │
       ▼
 DecorationManager.onConfigurationChanged()

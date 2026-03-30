@@ -1,7 +1,7 @@
 {
-  "name": "learn-area-manager",
-  "displayName": "Learn Area Manager",
-  "description": "Manage Microsoft Learn markdown sections (monikers, zone pivots, and tabs) with folding, hover previews, and focus commands",
+  "name": "markdown-region-buddy",
+  "displayName": "Markdown Region Buddy",
+  "description": "Manage markdown regions — monikers, zone pivots, and tabs — with folding, hover previews, and focus commands",
   "version": "0.0.3",
   "icon": "images/icon-light.png",
   "publisher": "alvinashcraft",
@@ -34,69 +34,69 @@
   "contributes": {
     "commands": [
       {
-        "command": "learnAreaManager.toggleCurrentSection",
-        "title": "Learn Area Manager: Toggle Current Section"
+        "command": "markdownRegionBuddy.toggleCurrentSection",
+        "title": "Markdown Region Buddy: Toggle Current Section"
       },
       {
-        "command": "learnAreaManager.expandCurrentSection",
-        "title": "Learn Area Manager: Expand Current Section"
+        "command": "markdownRegionBuddy.expandCurrentSection",
+        "title": "Markdown Region Buddy: Expand Current Section"
       },
       {
-        "command": "learnAreaManager.collapseCurrentSection",
-        "title": "Learn Area Manager: Collapse Current Section"
+        "command": "markdownRegionBuddy.collapseCurrentSection",
+        "title": "Markdown Region Buddy: Collapse Current Section"
       },
       {
-        "command": "learnAreaManager.expandAll",
-        "title": "Learn Area Manager: Expand All Sections"
+        "command": "markdownRegionBuddy.expandAll",
+        "title": "Markdown Region Buddy: Expand All Sections"
       },
       {
-        "command": "learnAreaManager.collapseAll",
-        "title": "Learn Area Manager: Collapse All Sections"
+        "command": "markdownRegionBuddy.collapseAll",
+        "title": "Markdown Region Buddy: Collapse All Sections"
       },
       {
-        "command": "learnAreaManager.expandAllLearnSections",
-        "title": "Learn Area Manager: Expand All Learn Sections"
+        "command": "markdownRegionBuddy.expandAllRegions",
+        "title": "Markdown Region Buddy: Expand All Regions"
       },
       {
-        "command": "learnAreaManager.collapseAllLearnSections",
-        "title": "Learn Area Manager: Collapse All Learn Sections"
+        "command": "markdownRegionBuddy.collapseAllRegions",
+        "title": "Markdown Region Buddy: Collapse All Regions"
       },
       {
-        "command": "learnAreaManager.expandNamedSection",
-        "title": "Learn Area Manager: Expand Named Section"
+        "command": "markdownRegionBuddy.expandNamedSection",
+        "title": "Markdown Region Buddy: Expand Named Section"
       },
       {
-        "command": "learnAreaManager.collapseNamedSection",
-        "title": "Learn Area Manager: Collapse Named Section"
+        "command": "markdownRegionBuddy.collapseNamedSection",
+        "title": "Markdown Region Buddy: Collapse Named Section"
       },
       {
-        "command": "learnAreaManager.focusSection",
-        "title": "Learn Area Manager: Focus on Section"
+        "command": "markdownRegionBuddy.focusSection",
+        "title": "Markdown Region Buddy: Focus on Section"
       },
       {
-        "command": "learnAreaManager.toggleDecorations",
-        "title": "Learn Area Manager: Toggle Section Background Colors"
+        "command": "markdownRegionBuddy.toggleDecorations",
+        "title": "Markdown Region Buddy: Toggle Section Background Colors"
       },
       {
-        "command": "learnAreaManager.configureAsDefaultProvider",
-        "title": "Learn Area Manager: Set as Default Folding Provider"
+        "command": "markdownRegionBuddy.configureAsDefaultProvider",
+        "title": "Markdown Region Buddy: Set as Default Folding Provider"
       }
     ],
     "keybindings": [
       {
-        "command": "learnAreaManager.toggleCurrentSection",
+        "command": "markdownRegionBuddy.toggleCurrentSection",
         "key": "ctrl+alt+[",
         "mac": "cmd+alt+[",
         "when": "editorTextFocus && editorLangId == markdown"
       },
       {
-        "command": "learnAreaManager.expandCurrentSection",
+        "command": "markdownRegionBuddy.expandCurrentSection",
         "key": "ctrl+alt+]",
         "mac": "cmd+alt+]",
         "when": "editorTextFocus && editorLangId == markdown"
       },
       {
-        "command": "learnAreaManager.focusSection",
+        "command": "markdownRegionBuddy.focusSection",
         "key": "ctrl+alt+f",
         "mac": "cmd+alt+f",
         "when": "editorTextFocus && editorLangId == markdown"
@@ -105,67 +105,67 @@
     "menus": {
       "editor/context": [
         {
-          "submenu": "learnAreaManager.context",
+          "submenu": "markdownRegionBuddy.context",
           "group": "1_modification",
           "when": "editorLangId == markdown"
         }
       ],
-      "learnAreaManager.context": [
+      "markdownRegionBuddy.context": [
         {
-          "command": "learnAreaManager.toggleCurrentSection",
+          "command": "markdownRegionBuddy.toggleCurrentSection",
           "group": "1_current"
         },
         {
-          "command": "learnAreaManager.expandNamedSection",
+          "command": "markdownRegionBuddy.expandNamedSection",
           "group": "2_named"
         },
         {
-          "command": "learnAreaManager.collapseNamedSection",
+          "command": "markdownRegionBuddy.collapseNamedSection",
           "group": "2_named"
         },
         {
-          "command": "learnAreaManager.expandAll",
+          "command": "markdownRegionBuddy.expandAll",
           "group": "3_all"
         },
         {
-          "command": "learnAreaManager.collapseAll",
+          "command": "markdownRegionBuddy.collapseAll",
           "group": "3_all"
         },
         {
-          "command": "learnAreaManager.expandAllLearnSections",
+          "command": "markdownRegionBuddy.expandAllRegions",
           "group": "4_learn_all"
         },
         {
-          "command": "learnAreaManager.collapseAllLearnSections",
+          "command": "markdownRegionBuddy.collapseAllRegions",
           "group": "4_learn_all"
         }
       ]
     },
     "submenus": [
       {
-        "id": "learnAreaManager.context",
-        "label": "Learn Area Manager"
+        "id": "markdownRegionBuddy.context",
+        "label": "Markdown Region Buddy"
       }
     ],
     "configuration": {
-      "title": "Learn Area Manager",
+      "title": "Markdown Region Buddy",
       "properties": {
-        "learnAreaManager.enableDecorations": {
+        "markdownRegionBuddy.enableDecorations": {
           "type": "boolean",
           "default": false,
           "description": "Enable background colors for different section types"
         },
-        "learnAreaManager.decorationOpacity": {
+        "markdownRegionBuddy.decorationOpacity": {
           "type": "number",
           "default": 0.05,
           "minimum": 0.01,
           "maximum": 0.3,
           "description": "Opacity for section background colors (0.01-0.3)"
         },
-        "learnAreaManager.overrideFoldingProvider": {
+        "markdownRegionBuddy.overrideFoldingProvider": {
           "type": "boolean",
           "default": false,
-          "description": "Set this extension as the default folding provider for Markdown files. Resolves conflicts with VS Code's built-in markdown folding provider. When enabled, this extension provides both Learn section folds and standard markdown folds (headings, code blocks, tables)."
+          "description": "Set this extension as the default folding provider for Markdown files. Resolves conflicts with VS Code's built-in markdown folding provider. When enabled, this extension provides both region folds and standard markdown folds (headings, code blocks, tables)."
         }
       }
     }

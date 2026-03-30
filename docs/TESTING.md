@@ -56,7 +56,7 @@
 ### 4. Context Menu Test
 
 1. Right-click in a markdown file
-2. Verify "Learn Area Manager" submenu appears
+2. Verify "Markdown Region Buddy" submenu appears
 3. Test each menu item:
    - **Toggle Current Section**: Should toggle section at cursor
    - **Expand Named Section**: Should expand all sections of same type/name
@@ -71,7 +71,7 @@
 ### 5. Command Palette Test
 
 1. Open Command Palette (`Ctrl+Shift+P`)
-2. Type "Learn Area Manager"
+2. Type "Markdown Region Buddy"
 3. Verify all commands appear
 4. Test each command
 
@@ -83,7 +83,7 @@
 
 1. Open `sample.md`
 2. Place cursor in a zone pivot section (e.g., "portal")
-3. Right-click → Learn Area Manager → Expand Named Section
+3. Right-click → Markdown Region Buddy → Expand Named Section
 4. Verify only "portal" sections remain expanded
 5. Repeat with Collapse Named Section
 
@@ -109,7 +109,7 @@
 
 #### Enable Decorations
 1. Open Command Palette
-2. Run "Learn Area Manager: Toggle Section Background Colors"
+2. Run "Markdown Region Buddy: Toggle Section Background Colors"
 3. Verify sections get subtle background colors:
    - Monikers: Blue tint
    - Zone Pivots: Green tint
@@ -117,7 +117,7 @@
 
 #### Change Opacity
 1. Open settings
-2. Set `learnAreaManager.decorationOpacity` to `0.1`
+2. Set `markdownRegionBuddy.decorationOpacity` to `0.1`
 3. Verify backgrounds become more visible
 
 #### Disable Decorations
@@ -257,10 +257,10 @@ describe('LearnSectionParser', () => {
 Test with:
 - GitHub-flavored markdown
 - Standard markdown
-- Learn-specific markdown
+- region-specific markdown
 - Mixed content (some sections, some not)
 
-**Expected**: Works correctly, doesn't interfere with non-Learn markdown
+**Expected**: Works correctly, doesn't interfere with non-region markdown
 
 ### Different Themes
 

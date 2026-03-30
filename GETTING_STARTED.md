@@ -1,10 +1,10 @@
-# Learn Area Manager - Getting Started
+# Markdown Region Buddy - Getting Started
 
 ## Installation & Setup
 
 1. **Install Dependencies**
    ```bash
-   cd learn-area-manager
+   cd markdown-region-buddy
    npm install
    ```
 
@@ -43,7 +43,7 @@
 - `Ctrl+Alt+F` (Mac: `Cmd+Alt+F`) - Focus on section (opens picker)
 
 ### 4. Context Menu
-Right-click in a markdown file to access "Learn Area Manager":
+Right-click in a markdown file to access "Markdown Region Buddy":
 - **Toggle Current Section** - Collapse/expand the section at cursor
 - **Expand Named Section** - Expand all sections with the same name/type
 - **Collapse Named Section** - Collapse all sections with the same name/type
@@ -52,18 +52,18 @@ Right-click in a markdown file to access "Learn Area Manager":
 
 ### 5. Focus Mode
 - Open Command Palette (`Ctrl+Shift+P`)
-- Type "Learn Area Manager: Focus on Section"
+- Type "Markdown Region Buddy: Focus on Section"
 - Select a section type/name from the list
 - All sections of that type/name expand, others collapse
 
 ### 6. Background Colors (Optional)
-- Enable via settings: `learnAreaManager.enableDecorations: true`
-- Or use Command Palette: "Learn Area Manager: Toggle Section Background Colors"
+- Enable via settings: `markdownRegionBuddy.enableDecorations: true`
+- Or use Command Palette: "Markdown Region Buddy: Toggle Section Background Colors"
 - Each section type gets a subtle background color:
   - Monikers: Blue tint
   - Zone Pivots: Green tint
   - Tabs: Pink tint
-- Adjust opacity: `learnAreaManager.decorationOpacity` (0.01-0.3)
+- Adjust opacity: `markdownRegionBuddy.decorationOpacity` (0.01-0.3)
 
 ## Configuration
 
@@ -71,8 +71,8 @@ Add to your `settings.json`:
 
 ```json
 {
-  "learnAreaManager.enableDecorations": false,
-  "learnAreaManager.decorationOpacity": 0.05
+  "markdownRegionBuddy.enableDecorations": false,
+  "markdownRegionBuddy.decorationOpacity": 0.05
 }
 ```
 
@@ -87,7 +87,7 @@ Add to your `settings.json`:
 ## Project Structure
 
 ```
-learn-area-manager/
+markdown-region-buddy/
 ├── src/
 │   ├── extension.ts              # Main extension entry point
 │   ├── learnSectionParser.ts     # Parse markdown sections
@@ -104,7 +104,7 @@ learn-area-manager/
 ## How It Works
 
 ### Section Detection
-The extension uses regex patterns to detect three types of Learn sections:
+The extension uses regex patterns to detect three types of regions:
 
 1. **Monikers**: Matches `::: moniker range="..."` and `::: moniker-end`
 2. **Zone Pivots**: Matches `:::zone pivot="..."` and `::: zone-end`
@@ -125,7 +125,7 @@ Uses `TextEditorDecorationType` with theme-aware colors (light/dark mode support
 ## Next Steps
 
 ### Potential Enhancements
-1. Add support for other Learn markdown extensions
+1. Add support for other region markdown extensions
 2. Implement unit tests for parser
 3. Add configuration for custom section colors
 4. Support for custom regex patterns

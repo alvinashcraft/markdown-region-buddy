@@ -1,6 +1,6 @@
-# Sample Microsoft Learn Markdown
+# Sample Markdown with Regions
 
-This is a sample file demonstrating the Learn Area Manager extension features.
+This is a sample file demonstrating the Markdown Region Buddy extension features.
 
 ## Monikers Example
 

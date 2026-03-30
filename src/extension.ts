@@ -61,18 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('markdownRegionBuddy.expandAll', () => 
-            LearnFoldingCommands.expandAll()
-        )
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand('markdownRegionBuddy.collapseAll', () => 
-            LearnFoldingCommands.collapseAll()
-        )
-    );
-
-    context.subscriptions.push(
         vscode.commands.registerCommand('markdownRegionBuddy.expandAllRegions', () => 
             LearnFoldingCommands.expandAllRegions()
         )

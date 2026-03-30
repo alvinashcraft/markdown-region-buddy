@@ -46,20 +46,12 @@
         "title": "Markdown Region Buddy: Collapse Current Section"
       },
       {
-        "command": "markdownRegionBuddy.expandAll",
-        "title": "Markdown Region Buddy: Expand All Sections"
-      },
-      {
-        "command": "markdownRegionBuddy.collapseAll",
-        "title": "Markdown Region Buddy: Collapse All Sections"
-      },
-      {
         "command": "markdownRegionBuddy.expandAllRegions",
-        "title": "Markdown Region Buddy: Expand All Regions"
+        "title": "Markdown Region Buddy: Expand All Regions (Monikers, Zones, Tabs)"
       },
       {
         "command": "markdownRegionBuddy.collapseAllRegions",
-        "title": "Markdown Region Buddy: Collapse All Regions"
+        "title": "Markdown Region Buddy: Collapse All Regions (Monikers, Zones, Tabs)"
       },
       {
         "command": "markdownRegionBuddy.expandNamedSection",
@@ -124,20 +116,12 @@
           "group": "2_named"
         },
         {
-          "command": "markdownRegionBuddy.expandAll",
-          "group": "3_all"
-        },
-        {
-          "command": "markdownRegionBuddy.collapseAll",
-          "group": "3_all"
-        },
-        {
           "command": "markdownRegionBuddy.expandAllRegions",
-          "group": "4_learn_all"
+          "group": "3_all"
         },
         {
           "command": "markdownRegionBuddy.collapseAllRegions",
-          "group": "4_learn_all"
+          "group": "3_all"
         }
       ]
     },

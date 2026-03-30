@@ -60,7 +60,7 @@ export class LearnFoldingCommands {
     }
 
     /**
-     * Expand all sections in the document
+     * Expand all foldable regions in the document (Learn sections, headings, code blocks, etc.)
      */
     public static async expandAll(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
@@ -72,9 +72,36 @@ export class LearnFoldingCommands {
     }
 
     /**
-     * Collapse all sections in the document
+     * Collapse all foldable regions in the document (Learn sections, headings, code blocks, etc.)
      */
     public static async collapseAll(): Promise<void> {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.document.languageId !== 'markdown') {
+            return;
+        }
+
+        await vscode.commands.executeCommand('editor.foldAll');
+    }
+
+    /**
+     * Expand only Learn sections (monikers, zone pivots, tabs) in the document
+     */
+    public static async expandAllLearnSections(): Promise<void> {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.document.languageId !== 'markdown') {
+            return;
+        }
+
+        const sections = LearnSectionParser.parseSections(editor.document);
+        for (const section of sections) {
+            await this.expandSection(editor, section);
+        }
+    }
+
+    /**
+     * Collapse only Learn sections (monikers, zone pivots, tabs) in the document
+     */
+    public static async collapseAllLearnSections(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
         if (!editor || editor.document.languageId !== 'markdown') {
             return;

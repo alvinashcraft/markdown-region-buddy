@@ -2,12 +2,25 @@
   "name": "learn-area-manager",
   "displayName": "Learn Area Manager",
   "description": "Manage Microsoft Learn markdown sections (monikers, zone pivots, and tabs) with folding, hover previews, and focus commands",
-  "version": "0.0.2",
-  "publisher": "your-publisher-name",
+  "version": "0.0.3",
+  "icon": "images/icon-light.png",
+  "publisher": "alvinashcraft",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/learn-area-manager"
+    "url": "https://github.com/alvinashcraft/learn-area-manager"
   },
+  "readme": "README.md",
+  "license": "MIT",
+  "keywords": [
+    "markdown",
+    "writing",
+    "microsoftlearn",
+    "regions",
+    "docs",
+    "documentation",
+    "templates",
+    "learn"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -39,6 +52,14 @@
       {
         "command": "learnAreaManager.collapseAll",
         "title": "Learn Area Manager: Collapse All Sections"
+      },
+      {
+        "command": "learnAreaManager.expandAllLearnSections",
+        "title": "Learn Area Manager: Expand All Learn Sections"
+      },
+      {
+        "command": "learnAreaManager.collapseAllLearnSections",
+        "title": "Learn Area Manager: Collapse All Learn Sections"
       },
       {
         "command": "learnAreaManager.expandNamedSection",
@@ -109,6 +130,14 @@
         {
           "command": "learnAreaManager.collapseAll",
           "group": "3_all"
+        },
+        {
+          "command": "learnAreaManager.expandAllLearnSections",
+          "group": "4_learn_all"
+        },
+        {
+          "command": "learnAreaManager.collapseAllLearnSections",
+          "group": "4_learn_all"
         }
       ]
     },

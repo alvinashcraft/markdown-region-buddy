@@ -5,3 +5,26 @@ out/
 package-lock.json
 .vscode-test/
 .vscode-test.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional eslint cache
+.eslintcache
+
+# Coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# dotenv environment variable files
+.env
+.env.*
+!.env.example
+
+# Output of 'npm pack'
+*.tgz

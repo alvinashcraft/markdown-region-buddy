@@ -72,6 +72,18 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+        vscode.commands.registerCommand('learnAreaManager.expandAllLearnSections', () => 
+            LearnFoldingCommands.expandAllLearnSections()
+        )
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('learnAreaManager.collapseAllLearnSections', () => 
+            LearnFoldingCommands.collapseAllLearnSections()
+        )
+    );
+
+    context.subscriptions.push(
         vscode.commands.registerCommand('learnAreaManager.expandNamedSection', () => 
             LearnFoldingCommands.expandNamedSection()
         )

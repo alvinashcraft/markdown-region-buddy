@@ -1,5 +1,36 @@
 # Markdown Region Buddy - Quick Reference
 
+## Installation & Setup
+
+### Install from .vsix
+
+1. Open VS Code
+2. Open the Command Palette (`Ctrl+Shift+P`)
+3. Type **Extensions: Install from VSIX...** and select it
+4. Browse to the `.vsix` file and click **Install**
+5. Reload VS Code when prompted
+
+### Set as Default Folding Provider (Recommended)
+
+Without this step, VS Code's built-in markdown folding can conflict with region folds — especially tab sections. To get the best experience:
+
+1. Open the Command Palette (`Ctrl+Shift+P`)
+2. Run **Markdown Region Buddy: Set as Default Folding Provider**
+3. Click **Yes** when prompted
+
+Alternatively, add this to your `settings.json`:
+
+```json
+"markdownRegionBuddy.overrideFoldingProvider": true
+```
+
+### Enable Background Colors (Optional)
+
+To visually distinguish moniker, zone pivot, and tab regions:
+
+1. Open the Command Palette (`Ctrl+Shift+P`)
+2. Run **Markdown Region Buddy: Toggle Section Background Colors**
+
 ## Keyboard Shortcuts
 
 | Shortcut | Action |

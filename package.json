@@ -2,7 +2,7 @@
   "name": "markdown-region-buddy",
   "displayName": "Markdown Region Buddy",
   "description": "Manage markdown regions — monikers, zone pivots, and tabs — with folding, hover previews, and focus commands",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icon": "images/icon-light.png",
   "publisher": "alvinashcraft",
   "repository": {

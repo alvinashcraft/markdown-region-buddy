@@ -136,7 +136,9 @@ export class LearnFoldingCommands {
     }
 
     /**
-     * Focus on a specific section (expand it and collapse others of the same type)
+     * Focus on one or more sections (expand them and collapse others of the same type).
+     * Supports multi-select and automatically includes compound zone pivots
+     * (e.g., selecting "python" also includes "python, typescript").
      */
     public static async focusSection(): Promise<void> {
         const editor = vscode.window.activeTextEditor;
@@ -157,37 +159,67 @@ export class LearnFoldingCommands {
                 section: s
             })),
             {
-                placeHolder: 'Select a section to focus on',
-                matchOnDescription: true
+                placeHolder: 'Select one or more sections to focus on',
+                matchOnDescription: true,
+                canPickMany: true
             }
         );
 
-        if (!selected) {
+        if (!selected || selected.length === 0) {
             return;
         }
 
-        // Get all sections of this type
-        const allSectionsOfType = LearnSectionParser.parseSections(editor.document)
-            .filter(s => s.type === selected.section.type);
-
-        // Collapse all sections of this type
-        for (const section of allSectionsOfType) {
-            await this.collapseSection(editor, section);
+        // Build the set of selected names per type
+        const selectedByType = new Map<string, Set<string>>();
+        for (const item of selected) {
+            const type = item.section.type;
+            if (!selectedByType.has(type)) {
+                selectedByType.set(type, new Set());
+            }
+            selectedByType.get(type)!.add(item.section.name);
         }
 
-        // Expand only the selected ones
-        const sectionsToExpand = LearnSectionParser.findSectionsByName(
-            editor.document, 
-            selected.section.type, 
-            selected.section.name
-        );
-        
-        for (const section of sectionsToExpand) {
-            await this.expandSection(editor, section);
+        // For zone pivots, auto-include compound zones that contain any selected value.
+        // E.g., if "python" is selected, also match "python, typescript".
+        const selectedZoneNames = selectedByType.get('zone');
+        if (selectedZoneNames) {
+            const allZoneSections = uniqueSections.filter(s => s.type === 'zone');
+            for (const zoneSection of allZoneSections) {
+                if (selectedZoneNames.has(zoneSection.name)) {
+                    continue;
+                }
+                // Split compound name on comma and check for overlap
+                const parts = zoneSection.name.split(',').map(p => p.trim());
+                const hasOverlap = parts.some(part => selectedZoneNames.has(part));
+                if (hasOverlap) {
+                    selectedZoneNames.add(zoneSection.name);
+                }
+            }
         }
 
+        const allSections = LearnSectionParser.parseSections(editor.document);
+        const typesToProcess = new Set(selectedByType.keys());
+
+        // Collapse all sections of the selected types
+        for (const section of allSections) {
+            if (typesToProcess.has(section.type)) {
+                await this.collapseSection(editor, section);
+            }
+        }
+
+        // Expand sections that match any of the selected names
+        let expandedCount = 0;
+        for (const section of allSections) {
+            const names = selectedByType.get(section.type);
+            if (names && names.has(section.name)) {
+                await this.expandSection(editor, section);
+                expandedCount++;
+            }
+        }
+
+        const labels = selected.map(s => s.label).join(', ');
         vscode.window.showInformationMessage(
-            `Focused on: ${selected.label} (${sectionsToExpand.length} section(s))`
+            `Focused on: ${labels} (${expandedCount} section(s))`
         );
     }
 

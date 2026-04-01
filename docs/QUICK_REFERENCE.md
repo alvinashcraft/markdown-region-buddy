@@ -2,6 +2,13 @@
 
 ## Installation & Setup
 
+### Install from the Visual Studio Marketplace
+
+1. Open VS Code
+2. Go to the Extensions view (`Ctrl+Shift+X`)
+3. Search for **Markdown Region Buddy**
+4. Click **Install**
+
 ### Install from .vsix
 
 1. Open VS Code

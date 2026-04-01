@@ -9,8 +9,18 @@
     "type": "git",
     "url": "https://github.com/alvinashcraft/markdown-region-buddy"
   },
+  "homepage": "https://github.com/alvinashcraft/markdown-region-buddy#readme",
+  "bugs": {
+    "url": "https://github.com/alvinashcraft/markdown-region-buddy/issues"
+  },
   "readme": "README.md",
   "license": "MIT",
+  "markdown": "github",
+  "galleryBanner": {
+    "color": "#0078D4",
+    "theme": "dark"
+  },
+  "qna": "marketplace",
   "keywords": [
     "markdown",
     "writing",
@@ -25,7 +35,8 @@
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Programming Languages"
   ],
   "activationEvents": [
     "onLanguage:markdown"

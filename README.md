@@ -1,48 +1,88 @@
 # Markdown Region Buddy
 
-A VS Code extension for managing markdown regions including monikers, zone pivots, and tabs.
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/alvinashcraft.markdown-region-buddy)](https://marketplace.visualstudio.com/items?itemName=alvinashcraft.markdown-region-buddy)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+A Visual Studio Code extension that helps authors manage markdown regions — **monikers**, **zone pivots**, and **tabs** — with folding, hover previews, focus commands, and optional background decorations. Built for [Microsoft Learn](https://learn.microsoft.com/) content authors and anyone working with regional markdown syntax.
 
 ## Features
 
-- **Folding Support**: Collapse and expand monikers, zone pivots, tabs, headings, code blocks, tables, blockquotes, HTML blocks, front matter, region markers, and lists
-- **Hover Previews**: View section contents when hovering over collapsed sections
-- **Context Menu**: Right-click to expand/collapse sections by name or type
-- **Keyboard Shortcuts**: Quick access to expand/collapse operations
-- **Focus Mode**: Expand specific sections while collapsing others
-- **Optional Background Colors**: Visual distinction for different section types
+### Region folding
 
-## Usage
+Collapse and expand moniker, zone pivot, and tab sections directly in the editor gutter. The extension also provides full standard markdown folding for headings, fenced code blocks, tables, front matter, blockquotes, HTML blocks, `<!-- #region -->` markers, and lists.
 
-### Keyboard Shortcuts
+### Hover previews
 
-- `Ctrl+Alt+[` (Mac: `Cmd+Alt+[`) - Toggle current section
-- `Ctrl+Alt+]` (Mac: `Cmd+Alt+]`) - Expand current section
-- `Ctrl+Alt+F` (Mac: `Cmd+Alt+F`) - Focus on section (opens picker)
+Hover over a collapsed section's start line to see a preview of up to 20 lines of content without expanding it.
 
-### Context Menu
+### Focus mode
 
-Right-click in a markdown file to access the "Markdown Region Buddy" menu with options to:
-- Toggle current section
-- Expand/collapse sections by name
-- Expand/collapse all sections
+Use the **Focus on Section** command to expand sections of a specific type/name while collapsing everything else — great for isolating the content you're working on.
 
-## Supported Section Types
+### Context menu and Command Palette
 
-- **Monikers**: `::: moniker range="..."` ... `::: moniker-end`
-- **Zone Pivots**: `:::zone pivot="..."` ... `::: zone-end`
-- **Tabs**: `# [Label](#tab/id)` ... `---`
+All operations are available from the right-click context menu (in a **Markdown Region Buddy** submenu) and from the Command Palette.
+
+### Background decorations (optional)
+
+Enable subtle, theme-aware background colors to visually distinguish moniker (blue), zone pivot (green), and tab (pink) regions.
+
+## Supported section types
+
+| Type | Start syntax | End syntax |
+|------|-------------|------------|
+| Moniker | `::: moniker range="..."` | `::: moniker-end` |
+| Zone Pivot | `:::zone pivot="..."` | `::: zone-end` |
+| Tab | `# [Label](#tab/id)` | `---` or next tab header |
+
+> Tab headers support any heading level (`#` through `######`) and optional dependent-tab syntax: `# [Label](#tab/tab-id/tab-condition)`.
+
+## Getting started
+
+1. Install the extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=alvinashcraft.markdown-region-buddy).
+2. Open any `.md` file — the extension activates automatically.
+3. Look for folding indicators in the gutter next to region start lines.
+
+For the best experience, set this extension as the default folding provider to avoid conflicts with VS Code's built-in markdown folding (see [Resolving folding conflicts](#resolving-folding-conflicts) below).
+
+## Keyboard shortcuts
+
+| Shortcut | Mac | Action |
+|----------|-----|--------|
+| `Ctrl+Alt+[` | `Cmd+Alt+[` | Toggle current section |
+| `Ctrl+Alt+]` | `Cmd+Alt+]` | Expand current section |
+| `Ctrl+Alt+F` | `Cmd+Alt+F` | Focus on section (opens picker) |
+
+## Commands
+
+All commands are available via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`). Search for **Markdown Region Buddy**:
+
+| Command | Description |
+|---------|-------------|
+| Toggle Current Section | Collapse or expand the section at the cursor |
+| Expand Current Section | Expand the section at the cursor |
+| Collapse Current Section | Collapse the section at the cursor |
+| Expand All Regions | Expand all moniker, zone pivot, and tab sections |
+| Collapse All Regions | Collapse all moniker, zone pivot, and tab sections |
+| Expand Named Section | Expand all sections matching the current section's name |
+| Collapse Named Section | Collapse all sections matching the current section's name |
+| Focus on Section | Pick a section type/name to focus; others collapse |
+| Toggle Section Background Colors | Enable or disable background decorations |
+| Set as Default Folding Provider | Configure this extension as the default markdown folding provider |
 
 ## Configuration
 
-- `markdownRegionBuddy.enableDecorations`: Enable background colors for sections (default: false)
-- `markdownRegionBuddy.decorationOpacity`: Opacity for section backgrounds (default: 0.05)
-- `markdownRegionBuddy.overrideFoldingProvider`: Set this extension as the default folding provider for Markdown files (default: false). Resolves conflicts with VS Code's built-in markdown folding provider.
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `markdownRegionBuddy.enableDecorations` | boolean | `false` | Enable background colors for different section types |
+| `markdownRegionBuddy.decorationOpacity` | number | `0.05` | Opacity for section background colors (0.01–0.3) |
+| `markdownRegionBuddy.overrideFoldingProvider` | boolean | `false` | Set this extension as the default folding provider for Markdown files |
 
-## Resolving Folding Conflicts
+## Resolving folding conflicts
 
 VS Code's built-in markdown language features provide their own folding ranges for headings, which can conflict with region folds — especially tab sections that use `# [Label](#tab/id)` syntax. When both providers emit folds on the same line, VS Code's built-in provider wins and the region fold is discarded.
 
-This extension includes its own detection of standard markdown folds (headings, fenced code blocks, and tables) so it can serve as the **sole folding provider** for markdown files without losing any functionality.
+This extension includes its own detection of standard markdown folds (headings, fenced code blocks, tables, and more) so it can serve as the **sole folding provider** for markdown files without losing any functionality.
 
 ### Option 1: Use the command
 
@@ -62,28 +102,22 @@ Add this to your `settings.json`:
 }
 ```
 
-## Known Limitations
+## Known limitations
 
-- **Default folding conflicts**: Without configuring this extension as the default folding provider (see above), VS Code's built-in markdown folding can take precedence over region folds when both start on the same line. This primarily affects tab sections.
-- **Tab section syntax**: Tab sections use `# [Label](#tab/id)` syntax which VS Code's markdown parser treats as H1 headers. Configuring this extension as the default folding provider resolves this.
-- **Workaround without overriding**: Hover tooltips and background decorations work correctly regardless of folding conflicts.
-
-## Design Decisions
-
-- **Separate markdown fold helper**: Standard markdown fold detection (`MarkdownFoldingHelper`) is kept separate from `LearnSectionParser` since these are generic markdown constructs, keeping the region-specific parser focused.
-- **Tab header exclusion**: `MarkdownFoldingHelper` explicitly skips `# [Label](#tab/id)` lines to avoid duplicating tab folds as heading folds.
-- **Expanding excluded set**: Fold detection uses an ordered pipeline — code blocks and front matter are detected first and added to an excluded-lines set, preventing `#` comments in YAML and `---` inside HTML from being misdetected as headings or table separators.
-- **Front matter vs tab `---`**: Front matter is only detected at line 0 with no leading whitespace, and is added to the section parser's excluded set so tab `---` terminators are not confused with YAML delimiters.
-- **FoldingRangeKind**: Regions and region markers use `FoldingRangeKind.Region`; standard markdown folds use `undefined` to match VS Code's built-in behavior.
-- **Setting default**: `overrideFoldingProvider` defaults to `false` so the extension does not modify user settings without explicit consent.
+- Without configuring this extension as the default folding provider (see above), VS Code's built-in markdown folding can take precedence over region folds when both start on the same line. This primarily affects tab sections.
+- Hover tooltips and background decorations work correctly regardless of folding provider configuration.
 
 ## Documentation
 
-- [Quick Reference](docs/QUICK_REFERENCE.md) - Keyboard shortcuts, commands, and tips
-- [Sample File](docs/sample.md) - Example markdown with all section types
-- [Architecture](docs/ARCHITECTURE.md) - Technical documentation
-- [Testing Guide](docs/TESTING.md) - Manual and automated testing instructions
+- [Quick Reference](docs/QUICK_REFERENCE.md) — Keyboard shortcuts, commands, and tips
+- [Architecture](docs/ARCHITECTURE.md) — Technical design and component overview
+- [Testing Guide](docs/TESTING.md) — Manual and automated testing instructions
+- [Sample File](docs/sample.md) — Example markdown with all section types
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/alvinashcraft/markdown-region-buddy).
 
 ## License
 
-MIT
+[MIT](LICENSE)

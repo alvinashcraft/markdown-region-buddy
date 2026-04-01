@@ -24,12 +24,27 @@
 │ • Parse       │◄──│ • Implements     │   │ • Shows    │   │ • Background     │
 │   monikers    │   │   Folding Range  │   │   preview  │   │   colors for     │
 │ • Parse       │   │   Provider       │   │   on hover │   │   sections       │
-│   zones       │   │ • Returns        │   │ • Max 20   │   │ • Theme-aware    │
-│ • Parse       │   │   folding ranges │   │   lines    │   │   colors         │
-│   tabs        │   │   for sections   │   │            │   │ • Toggle on/off  │
+│   zones       │   │ • Combines       │   │ • Max 20   │   │ • Theme-aware    │
+│ • Parse       │   │   region +       │   │   lines    │   │   colors         │
+│   tabs        │   │   standard folds │   │            │   │ • Toggle on/off  │
 │ • Find by     │   │                  │   │            │   │                  │
 │   line/name   │   │                  │   │            │   │                  │
-└───────┬───────┘   └──────────────────┘   └────────────┘   └──────────────────┘
+└───────┬───────┘   └────────┬─────────┘   └────────────┘   └──────────────────┘
+        │                    │
+        │                    ▼
+        │           ┌──────────────────┐
+        │           │   Markdown       │
+        │           │ FoldingHelper    │
+        │           ├──────────────────┤
+        │           │ • Headings       │
+        │           │ • Code blocks    │
+        │           │ • Tables         │
+        │           │ • Front matter   │
+        │           │ • Blockquotes    │
+        │           │ • HTML blocks    │
+        │           │ • Region markers │
+        │           │ • Lists          │
+        │           └──────────────────┘
         │
         │
         ▼
@@ -72,10 +87,11 @@ VS Code requests folding ranges
       ▼
 LearnFoldingProvider.provideFoldingRanges()
       │
-      ├─► Calls LearnSectionParser.parseSections()
+      ├─► Calls LearnSectionParser.parseSections()  → region folds
+      ├─► Calls MarkdownFoldingHelper.parse()       → standard folds
       │
       ▼
-Returns array of FoldingRange objects
+Merges both sets into one FoldingRange array
       │
       ▼
 VS Code displays fold indicators in gutter

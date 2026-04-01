@@ -196,103 +196,6 @@ Last tab with no --- at end
 
 ---
 
-## Automated Testing (Future)
-
-### Unit Tests to Implement
-
-```typescript
-describe('LearnSectionParser', () => {
-    test('should parse moniker sections', () => {
-        // Test moniker parsing
-    });
-    
-    test('should parse zone pivot sections', () => {
-        // Test zone parsing
-    });
-    
-    test('should parse tab sections', () => {
-        // Test tab parsing
-    });
-    
-    test('should find section at line', () => {
-        // Test findSectionAtLine
-    });
-    
-    test('should find sections by name', () => {
-        // Test findSectionsByName
-    });
-    
-    test('should handle nested sections', () => {
-        // Test nesting
-    });
-    
-    test('should handle malformed sections', () => {
-        // Test error cases
-    });
-});
-```
-
----
-
-## Performance Testing
-
-### Large Document Test
-
-1. Create a markdown file with 100+ sections
-2. Open in Extension Development Host
-3. Verify:
-   - Extension loads quickly
-   - No lag when scrolling
-   - Commands execute quickly
-   - Decorations update smoothly
-
-**Expected**: Good performance even with many sections
-
----
-
-## Compatibility Testing
-
-### Different Markdown Files
-
-Test with:
-- GitHub-flavored markdown
-- Standard markdown
-- region-specific markdown
-- Mixed content (some sections, some not)
-
-**Expected**: Works correctly, doesn't interfere with non-region markdown
-
-### Different Themes
-
-Test with:
-- Light themes
-- Dark themes
-- High contrast themes
-
-**Expected**: Decorations adapt to theme colors
-
----
-
-## Bug Testing Checklist
-
-- [ ] Folding indicators appear correctly
-- [ ] Hover previews work on collapsed sections
-- [ ] Keyboard shortcuts trigger correct commands
-- [ ] Context menu appears in markdown files only
-- [ ] Commands work from Command Palette
-- [ ] Named section operations affect correct sections
-- [ ] Focus mode isolates correct sections
-- [ ] Decorations toggle correctly
-- [ ] Settings changes take effect immediately
-- [ ] Nested sections work independently
-- [ ] Tab sections handle --- delimiter
-- [ ] Extension doesn't affect non-markdown files
-- [ ] No errors in Developer Tools console
-- [ ] Extension activates only for markdown files
-- [ ] Performance acceptable with large files
-
----
-
 ## Reporting Issues
 
 When reporting issues, include:
@@ -305,4 +208,4 @@ When reporting issues, include:
 6. **Extension version**
 7. **Operating system**
 8. **Screenshots/videos** if applicable
-9. **Console errors** from Developer Tools
+9. **Console errors** from Developer Tools (Help > Toggle Developer Tools)

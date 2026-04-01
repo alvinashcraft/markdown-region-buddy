@@ -1,69 +1,80 @@
 # Markdown Region Buddy - Getting Started
 
-## Installation & Setup
+## Installation
 
-1. **Install Dependencies**
-   ```bash
-   cd markdown-region-buddy
-   npm install
-   ```
+### From the Visual Studio Marketplace
 
-2. **Compile the Extension**
-   ```bash
-   npm run compile
-   ```
+1. Open VS Code
+2. Go to the Extensions view (`Ctrl+Shift+X`)
+3. Search for **Markdown Region Buddy**
+4. Click **Install**
 
-3. **Run the Extension**
-   - Press `F5` in VS Code to open a new Extension Development Host window
-   - Or use the "Run Extension" launch configuration from the debug panel
+### From a .vsix file
 
-## Testing the Extension
+1. Open the Command Palette (`Ctrl+Shift+P`)
+2. Run **Extensions: Install from VSIX...**
+3. Browse to the `.vsix` file and click **Install**
+4. Reload VS Code when prompted
 
-1. Open the `sample.md` file in the Extension Development Host window
-2. You should see folding indicators (▼/▶) appear next to section headers
+## Setup (recommended)
 
-## Features Overview
+### Set as default folding provider
 
-### 1. Folding Sections
+Without this step, VS Code's built-in markdown folding can conflict with region folds — especially tab sections. To get the best experience:
+
+1. Open the Command Palette (`Ctrl+Shift+P`)
+2. Run **Markdown Region Buddy: Set as Default Folding Provider**
+3. Click **Yes** when prompted
+
+Alternatively, add this to your `settings.json`:
+
+```json
+"markdownRegionBuddy.overrideFoldingProvider": true
+```
+
+## Quick tour
+
+### 1. Folding sections
 - Click the folding indicator (▼) in the left gutter to collapse a section
 - Click (▶) to expand it again
 - Works for:
   - Monikers: `::: moniker range="name"`
   - Zone Pivots: `:::zone pivot="name"`
   - Tabs: `# [Label](#tab/id)`
+  - Plus headings, fenced code blocks, tables, front matter, blockquotes, HTML blocks, region markers, and lists
 
-### 2. Hover Previews
+### 2. Hover previews
 - Hover over a collapsed section's start line to see a preview tooltip
 - Shows up to 20 lines of content
 - Displays the section type and name
 
-### 3. Keyboard Shortcuts
-- `Ctrl+Alt+[` (Mac: `Cmd+Alt+[`) - Toggle current section
-- `Ctrl+Alt+]` (Mac: `Cmd+Alt+]`) - Expand current section  
-- `Ctrl+Alt+F` (Mac: `Cmd+Alt+F`) - Focus on section (opens picker)
+### 3. Keyboard shortcuts
+- `Ctrl+Alt+[` (Mac: `Cmd+Alt+[`) — Toggle current section
+- `Ctrl+Alt+]` (Mac: `Cmd+Alt+]`) — Expand current section
+- `Ctrl+Alt+F` (Mac: `Cmd+Alt+F`) — Focus on section (opens picker)
 
-### 4. Context Menu
-Right-click in a markdown file to access "Markdown Region Buddy":
-- **Toggle Current Section** - Collapse/expand the section at cursor
-- **Expand Named Section** - Expand all sections with the same name/type
-- **Collapse Named Section** - Collapse all sections with the same name/type
-- **Expand All Sections** - Expand everything in the document
-- **Collapse All Sections** - Collapse everything in the document
+### 4. Context menu
+Right-click in a markdown file to access **Markdown Region Buddy**:
+- **Toggle Current Section** — Collapse/expand the section at cursor
+- **Expand Named Section** — Expand all sections with the same name/type
+- **Collapse Named Section** — Collapse all sections with the same name/type
+- **Expand All Regions** — Expand all moniker, zone pivot, and tab sections
+- **Collapse All Regions** — Collapse all moniker, zone pivot, and tab sections
 
-### 5. Focus Mode
-- Open Command Palette (`Ctrl+Shift+P`)
-- Type "Markdown Region Buddy: Focus on Section"
-- Select a section type/name from the list
-- All sections of that type/name expand, others collapse
+### 5. Focus mode
+1. Open the Command Palette (`Ctrl+Shift+P`)
+2. Type **Markdown Region Buddy: Focus on Section**
+3. Select one or more section types/names from the list
+4. All matching sections expand; others collapse
 
-### 6. Background Colors (Optional)
+### 6. Background colors (optional)
 - Enable via settings: `markdownRegionBuddy.enableDecorations: true`
-- Or use Command Palette: "Markdown Region Buddy: Toggle Section Background Colors"
+- Or use the Command Palette: **Markdown Region Buddy: Toggle Section Background Colors**
 - Each section type gets a subtle background color:
   - Monikers: Blue tint
   - Zone Pivots: Green tint
   - Tabs: Pink tint
-- Adjust opacity: `markdownRegionBuddy.decorationOpacity` (0.01-0.3)
+- Adjust opacity: `markdownRegionBuddy.decorationOpacity` (0.01–0.3)
 
 ## Configuration
 
@@ -72,86 +83,19 @@ Add to your `settings.json`:
 ```json
 {
   "markdownRegionBuddy.enableDecorations": false,
-  "markdownRegionBuddy.decorationOpacity": 0.05
+  "markdownRegionBuddy.decorationOpacity": 0.05,
+  "markdownRegionBuddy.overrideFoldingProvider": false
 }
 ```
 
-## Development Commands
+## Try it out
 
-- `npm run compile` - Compile TypeScript
-- `npm run watch` - Watch mode for development
-- `npm run lint` - Run ESLint
-- `npm run package` - Package for production
-- `npm test` - Run tests (after implementing tests)
-
-## Project Structure
-
-```
-markdown-region-buddy/
-├── src/
-│   ├── extension.ts              # Main extension entry point
-│   ├── learnSectionParser.ts     # Parse markdown sections
-│   ├── learnFoldingProvider.ts   # Provide folding ranges
-│   ├── learnHoverProvider.ts     # Provide hover tooltips
-│   ├── learnFoldingCommands.ts   # Command implementations
-│   └── learnDecorationManager.ts # Background color decorations
-├── sample.md                      # Sample markdown for testing
-├── package.json                   # Extension manifest
-├── tsconfig.json                  # TypeScript configuration
-└── webpack.config.js              # Webpack bundling config
-```
-
-## How It Works
-
-### Section Detection
-The extension uses regex patterns to detect three types of regions:
-
-1. **Monikers**: Matches `::: moniker range="..."` and `::: moniker-end`
-2. **Zone Pivots**: Matches `:::zone pivot="..."` and `::: zone-end`
-3. **Tabs**: Matches `# [Label](#tab/id)` with `---` or next tab as end
-
-### Folding Provider
-Implements `vscode.FoldingRangeProvider` to tell VS Code where sections can fold.
-
-### Hover Provider
-Implements `vscode.HoverProvider` to show content previews when hovering over collapsed sections.
-
-### Commands
-Uses VS Code's command system to manipulate folding state programmatically.
-
-### Decorations
-Uses `TextEditorDecorationType` with theme-aware colors (light/dark mode support).
-
-## Next Steps
-
-### Potential Enhancements
-1. Add support for other region markdown extensions
-2. Implement unit tests for parser
-3. Add configuration for custom section colors
-4. Support for custom regex patterns
-5. Minimap indicators for sections
-6. Status bar showing current section info
-7. Breadcrumb integration
-
-### Known Limitations
-- Folding indicators are VS Code's standard ones (can't customize the +/- icons)
-- Background colors are optional and disabled by default
-- Nested sections may have complex folding behavior
-
-## Publishing
-
-To publish to VS Code Marketplace:
-
-1. Update `publisher` in package.json
-2. Create an icon (128x128 PNG)
-3. Install vsce: `npm install -g @vscode/vsce`
-4. Package: `vsce package`
-5. Publish: `vsce publish`
+Open the [sample file](docs/sample.md) in VS Code to experiment with all the supported section types.
 
 ## Support
 
-For issues or feature requests, please file an issue in the repository.
+For issues or feature requests, please [open an issue](https://github.com/alvinashcraft/markdown-region-buddy/issues) on GitHub.
 
 ## License
 
-MIT License - See LICENSE file for details.
+MIT License — See [LICENSE](LICENSE) for details.

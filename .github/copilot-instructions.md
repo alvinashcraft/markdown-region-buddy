@@ -9,12 +9,12 @@ Markdown Region Buddy is a VS Code extension that helps authors manage markdown 
 The extension follows a modular component-based architecture:
 
 - **`extension.ts`** — Entry point. Registers providers, commands, event listeners, and the decoration manager. All registrations are pushed to `context.subscriptions` for proper lifecycle management.
-- **`learnSectionParser.ts`** — Core parser. Uses regex to detect moniker (`:::\s*moniker range="..."`), zone pivot (`:::\s*zone pivot="..."`), and tab (`# [Label](#tab/id)`) sections. Returns `LearnSection[]`. All methods are static.
-- **`learnFoldingProvider.ts`** — Implements `vscode.FoldingRangeProvider`. Combines region ranges from `LearnSectionParser` with standard markdown fold ranges from `MarkdownFoldingHelper`. Regions use `FoldingRangeKind.Region`; standard markdown folds use `undefined`.
-- **`markdownFoldingHelper.ts`** — Static class providing standard markdown fold detection (headings, fenced code blocks, tables). Tracks code-fence state to avoid false positives. Skips tab header lines (`# [Label](#tab/id)`) to avoid conflicts with `LearnSectionParser`.
+- **`learnSectionParser.ts`** — Core parser. Uses regex to detect moniker (`:::\s*moniker range="..."`), zone pivot (`:::\s*zone pivot="..."`), and tab (`# [Label](#tab/id)`) sections. Returns `LearnSection[]`. All methods are static. Excludes code-fenced and YAML front-matter regions when scanning for `---` tab terminators.
+- **`learnFoldingProvider.ts`** — Implements `vscode.FoldingRangeProvider`. Combines region ranges from `LearnSectionParser` with standard markdown fold ranges from `MarkdownFoldingHelper`. Regions use `FoldingRangeKind.Region`; standard markdown folds use `undefined`. Clips overlapping markdown ranges so Learn-region folds always take precedence.
+- **`markdownFoldingHelper.ts`** — Static class providing standard markdown fold detection: headings, fenced code blocks, tables, YAML front matter, blockquotes, HTML blocks, `<!-- #region -->` markers, and lists. Tracks code-fence state to avoid false positives. Skips tab header lines (`# [Label](#tab/id)`) to avoid conflicts with `LearnSectionParser`. (Note: this file doesn't use the `learn` prefix because it handles general markdown, not Learn-specific sections.)
 - **`learnHoverProvider.ts`** — Implements `vscode.HoverProvider`. Shows a preview of collapsed section content (max 20 lines) on hover over the section start line.
 - **`learnFoldingCommands.ts`** — Static class with all command implementations (toggle, expand, collapse, focus, named operations). Uses VS Code's `editor.fold`/`editor.unfold` commands with `selectionLines`.
-- **`learnDecorationManager.ts`** — Manages section background colors using `TextEditorDecorationType`. Theme-aware (light/dark), configurable opacity, togglable at runtime.
+- **`learnDecorationManager.ts`** — Manages section background colors using `TextEditorDecorationType`. Theme-aware (light/dark), configurable opacity, togglable at runtime. Decoration updates are debounced (300ms).
 
 ### Data model
 
@@ -52,14 +52,14 @@ interface LearnSection {
 - **TypeScript** with `strict: true` (target ES2022, module Node16)
 - **Webpack** bundles to `dist/extension.js` (commonjs2, node target)
 - **ESLint** with `@typescript-eslint` — enforces camelCase/PascalCase imports, curly braces, `eqeqeq`, semicolons, no throw literals
-- Tests use `@vscode/test-cli` and `@vscode/test-electron` with Mocha
+- Test infrastructure (`@vscode/test-cli`, `@vscode/test-electron`, Mocha) is configured but no automated test files exist yet. Testing is currently manual — see `docs/TESTING.md`
 
 ### Naming Conventions
 
 - **Command IDs**: `markdownRegionBuddy.<camelCaseAction>` (e.g., `markdownRegionBuddy.toggleCurrentSection`)
 - **Configuration keys**: `markdownRegionBuddy.<camelCaseSetting>` (e.g., `markdownRegionBuddy.enableDecorations`)
 - **Classes**: PascalCase, prefixed with `Learn` (e.g., `LearnSectionParser`, `LearnFoldingProvider`) — internal names referencing the markdown syntax origin
-- **Files**: camelCase, prefixed with `learn` (e.g., `learnSectionParser.ts`, `learnFoldingCommands.ts`)
+- **Files**: camelCase, prefixed with `learn` (e.g., `learnSectionParser.ts`, `learnFoldingCommands.ts`). Exception: `markdownFoldingHelper.ts` uses a `markdown` prefix because it handles general markdown folding, not Learn-specific sections
 - **Interfaces**: PascalCase (e.g., `LearnSection`)
 
 ### Code Patterns
@@ -88,10 +88,11 @@ interface LearnSection {
 - `npm run watch` — Webpack watch mode for development
 - `npm run lint` — Run ESLint on `src/`
 - `npm run package` — Production build with hidden source maps
-- `npm run compile-tests` — Compile tests to `out/`
-- `npm test` — Runs `vscode-test` (requires `compile-tests`, `compile`, and `lint`)
+- `npm run compile-tests` — Compile tests to `out/` (no test files exist yet)
+- `npm test` — Runs `vscode-test` (requires `compile-tests`, `compile`, and `lint`; no tests exist yet)
 - Press **F5** to launch the Extension Development Host for manual testing
-- Use `docs/sample.md` as the test fixture in the development host
+- Use `docs/sample.md` and `docs/sample-front-matter.md` as test fixtures in the development host
+- Follow `docs/TESTING.md` for the manual test checklist
 
 ## Guidelines for New Features
 
@@ -131,5 +132,3 @@ When adding or modifying commands, reference the `vscode-ext-commands` skill. Wh
 - Without configuring this extension as the default folding provider, VS Code's built-in markdown folding can conflict with region folds when both start on the same line.
 - Tab sections (`# [Label](#tab/id)`) are treated as H1 headers by VS Code's markdown parser, causing folding conflicts unless this extension is the default provider.
 - Hover and decoration features work regardless of folding conflicts.
-- List sub-item folding from the built-in provider is not yet replicated.
-- Blockquotes and HTML block folding from the built-in provider are not yet replicated.

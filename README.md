@@ -113,6 +113,7 @@ Add this to your `settings.json`:
 - [Architecture](docs/ARCHITECTURE.md) — Technical design and component overview
 - [Testing Guide](docs/TESTING.md) — Manual and automated testing instructions
 - [Sample File](docs/sample.md) — Example markdown with all section types
+- [Security Notes](docs/security.md) — Security posture, risks, and hardening guidance
 
 ## Contributing
 
